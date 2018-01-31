@@ -3,14 +3,14 @@ package sk.akademiasovy.tipos.database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 
 public class MySQL {
     private final String url = "jdbc:mysql://localhost:3306/";
     private final String dbName = "tipos";
     private final String driver = "com.mysql.jdbc.Driver";
-    private final String userName = "user2";
+    private final String userName1 = "user1";
+    private final String userName2 = "user2";
     private final String password = "secret";
 
     private Connection conn;
@@ -18,7 +18,7 @@ public class MySQL {
     public void testConnection() {
         try {
             Class.forName(driver).newInstance();
-            conn = DriverManager.getConnection(url + dbName, userName, password);
+            conn = DriverManager.getConnection(url + dbName, userName1, password);
             if (conn == null) {
                 System.out.println("Connection failed");
             } else
@@ -33,7 +33,7 @@ public class MySQL {
     public boolean insertValuesIntoDrawHistory(int arr[]) {
         try {
             Class.forName(driver).newInstance();
-            conn = DriverManager.getConnection(url + dbName, userName, password);
+            conn = DriverManager.getConnection(url + dbName, userName1, password);
             String cmd = "INSERT into draw_history(boll1,boll2,boll3,boll4,boll5) ";
             cmd += "VALUES(?,?,?,?,?)";
             PreparedStatement preparedStatement = conn.prepareStatement(cmd);
@@ -48,5 +48,18 @@ public class MySQL {
             System.out.println("Error: I cannot connect to the database");
         }
         return true;
+    }
+
+    public void getNewBets(){
+        try {
+            Class.forName(driver).newInstance();
+            conn = DriverManager.getConnection(url + dbName, userName2, password);
+            String cmd = "SELECT * FROM bets "+
+                    "INNER JOIN bet_details ON bets.id=bet_details.idb"+
+                    "WHERE bets.draw_id IS NULL";
+            PreparedStatement preparedStatement=conn.prepareStatement(cmd);
+        }catch (Exception e){
+            System.out.println("Error: "+e.getMessage());
+        }
     }
 }
