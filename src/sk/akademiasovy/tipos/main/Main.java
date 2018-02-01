@@ -15,5 +15,6 @@ public class Main
         MySQL dbs = new MySQL();
 
         dbs.insertValuesIntoDrawHistory(t1.getArr());
+        dbs.getNewBets();
     }
 }
